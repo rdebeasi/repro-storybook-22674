@@ -1,6 +1,8 @@
 import type { Preview } from '@storybook/angular';
+import { applicationConfig } from '@storybook/angular';
 import { setCompodocJson } from '@storybook/addon-docs/angular';
 import docJson from '../documentation.json';
+import { APP_INITIALIZER } from '@angular/core';
 setCompodocJson(docJson);
 
 const preview: Preview = {
@@ -14,5 +16,20 @@ const preview: Preview = {
     },
   },
 };
+
+export const decorators = [
+  applicationConfig({
+    providers: [
+      {
+        provide: APP_INITIALIZER,
+        useFactory: () => () => {
+          // This console.log never runs.
+          console.log('Hello from useFactory');
+        },
+        multi: true,
+      },
+    ],
+  }),
+];
 
 export default preview;
